@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# This script is displaying "Best School" 10 times
-pgrep bash | sed -e 's/$/ bash/'
+# Display PID with proc name "bash"
+
+pgrep -l "bash"
