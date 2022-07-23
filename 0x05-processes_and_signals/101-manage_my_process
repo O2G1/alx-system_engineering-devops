@@ -1,39 +1,35 @@
 #!/usr/bin/env bash
-# This script manages manage_my_process.
+# This script is displaying "Holberton School" 10 times
+if [ "$#" -ne 1 ]
+then
+	    echo "Usage: manage_my_process {start|stop|restart}"
+	        exit $?
+fi
 
-FILE="/var/run/my_process.pid"
+if [ "$1" != "start" ] && [ "$1" != "stop" ] && [ "$1" != "restart" ]
+then
+	    echo "Usage: manage_my_process {start|stop|restart}"
+	        exit $?
+fi
 
-Error (){
-    echo "Usage: manage_my_process {start|stop|restart}"
-}
+if [ "$1" == "start" ]
+then
+	    ./manage_my_process &
+	        echo "$!" > /var/run/my_process.pid
+		    echo "manage_my_process started"
 
-Start() {
-    ./manage_my_process & echo $$ > $FILE
-}
+	    elif [ "$1" == "stop" ]
+	    then
+		        kill "$(cat /var/run/my_process.pid)"
+			    rm /var/run/my_process.pid
+			        echo "manage_my_process stopped"
 
-Stop() {
-    pkill -f ./"manage_my_process" & sudo rm $FILE
-}
+			elif [ "$1" == "restart" ]
+			then
+				    kill "$(cat /var/run/my_process.pid)"
+				        rm /var/run/my_process.pid
+					    ./manage_my_process &
+					        echo "$!" > /var/run/my_process.pid
+						    echo "manage_my_process restarted"
 
-Restart() {
-    Stop
-    Start
-}
-
-if [ $# != 1 ]; then
-    Error
-else
-    case "$1" in
-        start)
-            Start
-            echo "manage_my_process started";;
-        stop)
-            Stop
-            echo "manage_my_process stopped";;
-        restart)
-            Restart
-            echo "manage_my_process restarted";;
-        *)
-            Error;;
-    esac
 fi
